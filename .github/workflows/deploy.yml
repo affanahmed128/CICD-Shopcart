@@ -13,33 +13,30 @@ jobs:
     environment: production
 
     steps:
-      # 1️⃣ Checkout code (REQUIRED)
+      # 1️⃣ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node (LTS)
+      # 2️⃣ Setup Node.js (LTS)
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
           node-version: '18'
 
-      # 3️⃣ Install backend dependencies
+      # 3️⃣ Install dependencies (ROOT)
       - name: Install dependencies
-        working-directory: ShopCart-Ecommerce-Backend
         run: npm install
 
-      # 4️⃣ Install PM2 globally
+      # 4️⃣ Install PM2
       - name: Install PM2
         run: npm install -g pm2
 
-      # 5️⃣ Run backend tests (optional)
+      # 5️⃣ Run tests (if present)
       - name: Run tests
-        working-directory: ShopCart-Ecommerce-Backend
         run: npm test --if-present
 
-      # 6️⃣ Deploy / Restart app with PM2
+      # 6️⃣ Deploy with PM2
       - name: Deploy to AWS
-        working-directory: ShopCart-Ecommerce-Backend
         run: |
           pm2 restart shopcart || pm2 start src/index.js --name shopcart
           pm2 save
